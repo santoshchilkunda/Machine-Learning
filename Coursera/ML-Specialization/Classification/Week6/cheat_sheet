@@ -1,0 +1,17 @@
+
+Good accuracy: beating a random binary classifier (0.5)
+
+Precision: fraction of predictions that are incorrect (negative review instead of positive)
+Recall: fraction of all correct results that were predicted
+
+Confusion matrix:
+      TP FN
+      FP TN
+  Precision = TP / (TP + FP)
+  Recall = TP / (TP + FN)
+  Accuracy = (TP + TN) / (TP + TN + FP + FN)
+  F-measure = (2 * Precision * Recall) / (Precision + Recall)
+
+Use probability (P(y=+1|X,w)) to trade-off between precision and recall
+  Increase P threshold: high precision, low recall (pessimestic model)
+  Decrease P threshld: low precision, high recall (optimistic model)
