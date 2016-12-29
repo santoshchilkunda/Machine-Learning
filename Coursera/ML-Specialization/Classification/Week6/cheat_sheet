@@ -15,3 +15,28 @@ Confusion matrix:
 Use probability (P(y=+1|X,w)) to trade-off between precision and recall
   Increase P threshold: high precision, low recall (pessimestic model)
   Decrease P threshld: low precision, high recall (optimistic model)
+
+PROGRAMMING NOTES
+
+# perform text cleaning
+def remove_punctuation(text):
+    return text.translate(None, string.punctuation)
+products['review_clean'] = products['review'].apply(lambda x: remove_punctuation(str(x)))
+
+
+# build a word count vector
+from sklearn.feature_extraction.text import CountVectorizer
+token_pattern=r'\b\w+\b' # to include single letter words
+fit_transform, transform
+
+# metrics
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+
+# smallest th values that achieves a precision of 96.5% or better
+i = [i for i, p in enumerate(precision_all) if p >= .965][0]
+
+# all reviews that have the name baby (case insensitive)
+baby_reviews = test_data2[test_data2['name'].str.lower().str.contains('baby')]
