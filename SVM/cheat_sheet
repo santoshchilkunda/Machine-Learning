@@ -1,0 +1,23 @@
+Resources:
+https://www.analyticsvidhya.com/blog/2015/10/understaing-support-vector-machine-example-code/
+http://www.cs.ucf.edu/courses/cap6412/fall2009/papers/Berwick2003.pdf
+http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
+
+* Doesn't work well on large datasets
+
+* Maximum margin (linear) classifier:
+  - Maximize margin (1/||w||) by minimizing 0.5*(w'w)
+  - ti(w'x + b) >= 1
+    ti -> target
+    (w'x + b) -> prediction
+* Classifies classes accurately prior to maximizing margin, ignores outliers
+
+Support vectors: datapoints that lie closest to the classification surface
+
+Linear regression: all datapoints influence optimal solution
+SVM: only support vectors influence optimal solution
+
+Kernels: patterns that are not linearly separable are transformed into a new space where they are separable
+* Polynomial function: k(x,y) = (1 + x'y)^s
+* Sigmoid function: k(x,y) = tanh(Kx'y - delta)
+* Radial basis function: k(x,y) = exp(-(x-y)^2/(2*sigma^2))
