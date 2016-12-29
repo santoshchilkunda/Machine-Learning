@@ -1,0 +1,32 @@
+
+Non-parametric methods:
+
+1-NN regression
+  * Find closest xi in the dataset
+  * Predict Yq = Y(xi)
+  Sensitive to noise and interpolation
+
+k-NN regression
+  Extension to 1-NN
+  * Look for k nearest observations
+  * Predict Yq = sum(Ynnk)/k
+  Discontinuity issues
+
+Weighted k-NN
+  To address the discontinuity issue
+  Weight is small when distance is large (eg: weight = (1/distance))
+
+Kernel regression
+  Instead of weighting NN points only, weight all points use a gaussian kernel 
+  Kernel has bounded support
+
+Performance of NN depends on how well the data covers the input space
+
+Voronoi tesselation
+
+# distance metric
+  Euclidean 
+  Scaled euclidean
+  Manhattan (|Xdist| + |Ydist|)
+
+PROGRAMMING NOTES
