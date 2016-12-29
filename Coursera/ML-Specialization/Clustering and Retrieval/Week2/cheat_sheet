@@ -1,0 +1,62 @@
+
+1) How to represent a document?
+  * Bag of words model
+  * Term Frequency, Inverse Document Frequency (TF-IDF)
+    TF = word count
+    IDF = log (#docs / (1 + #doc_using_the_word))
+
+2) How to measure similarity?
+  * Euclidean distance
+    sqrt((Xi - Xq)'(Xi-Xq))
+  * Scaled euclidean distance: Higher weight for important words
+    sqrt((Xi - Xq)'A(Xi-Xq))
+    A - diagonal matrix of weights
+  * Cosine similarity (inner product)
+    Xi'Xq (= cos theta)
+    Normalization: If unnormalized, double the vectors will increase the distance 4X
+    Cosine distance = (1 - normalized cosine similarity) = (1 - (Xi'Xq)/(||Xi||*||Xq||))
+    Might return the same distance for short tweet and a long article
+
+3) How to search over all documents?
+  * 1 - NN
+  * k - NN
+
+PROGRAMMING NOTES
+
+# csr (compressed sparse row) matrix
+from scipy.sparse import csr_matrix
+
+# count vectorizer, tfidf vectorizer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# add row number
+wiki['row_number'] = wiki.index # pandas
+wiki = wiki.add_row_number() # graphlab
+
+# nearest neightbors
+from sklearn.neighbors import NearestNeighbors
+fit, kneighbors
+
+# flatten, join
+neighbors = graphlab.SFrame({'distance':bo_knn_dist.flatten(), 'id':bo_knn_idx.flatten()})
+print wiki.join(neighbors, on='id').sort('distance')[['id','name','distance']]
+
+# split 'word_count' into 'word' and 'count'
+word_count_table = row[['word_count']].stack('word_count', new_column_name=['word','count'])
+
+# combine two arrays on 'word'
+combined_words = obama_words.join(barrio_words, on='word')
+
+# rename columns
+combined_words = combined_words.rename({'count':'Obama', 'count.1':'Barrio'})
+
+# subset check
+common_words = set(combined_words['word'][0:5])
+unique_words = (word_count_vector.keys())
+common_words.issubset(unique_words)
+
+# euclidean and cosine distance metric
+from sklearn.metrics.pairwise import euclidean_distances
+from sklearn.metrics.pairwise import cosine_distances
+
