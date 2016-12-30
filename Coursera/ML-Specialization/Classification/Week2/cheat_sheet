@@ -1,0 +1,45 @@
+
+Pick w such that:
+  Positive datapoints: P(y=+1|xi,w) = 1
+  Negative datapoints: P(y=+1|xi,w) = 0
+
+Quality metric: Maximum likelihood estimation l(w)
+  Larger the better
+  l(w) = P(y=+1|x0,w) * P(y=+1|x1,w) * P(y=+1|x2,w) ... 
+       = product(P(y=+1|xi,w)), i = 0,1,2....
+  Maximize l(w) using gradient ascent
+  No closed form solution
+
+w(t+1) <- w(t) + eta*partial_derivative
+partial_derivative_wrt_wj = sum_over_all_datapoints( hj(xj)*( I - P(y=+1|xi,w) ) )
+I -> indicator function, +1 if y = 1, else 0
+
+Log likelihood estimation:
+ll(w) = sum_over_all_datapoints( (I-1)*score - log(1 + exp(-score)) )
+
+accuracy = 1 - error = num_correc_pred / num_obs
+
+Overfitting -> P goes towards 1
+
+Desired cost format:
+  Quality = Measure of fit (large -> good fit) - Measure of mag of coeffs (large -> overfit)
+  Measure of mag of coeffs -> L1, L2 norm
+  derivate(L2 norm) = -2 * lambda * wj
+  
+  Quality = ll(w) - lamba*(L1 or L2 norm)
+  
+PROGRAMMING NOTES
+  
+with open('important_words.json') as data_file:    
+    important_words = json.load(data_file)
+
+def get_numpy_data(dataframe, features, label):
+    dataframe['one'] = 1
+    features = ['one'] + features
+    features_array = dataframe[features].as_matrix()
+    output_label = dataframe[label].as_matrix()    
+    return (features_array, output_label)
+
+# word coeff pair
+word_coefficient_tuples = [(word, coeff_no_intercept) for word, coeff_no_intercept in zip(important_words, coeff_no_intercept)]
+word_coefficient_tuples = sorted(word_coefficient_tuples, key=lambda x:x[1], reverse=True)
