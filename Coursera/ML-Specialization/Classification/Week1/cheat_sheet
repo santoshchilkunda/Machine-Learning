@@ -1,0 +1,19 @@
+
+Linear classifiers: output is weighted sum of inputs
+
+Logistic regression
+  One of the most common linear classifiers
+  Apart from the output class, probability that it belongs to the class is also computed
+
+score = w'h(x)
+sigmoid(score) = 1 / (1 + exp(-score))
+  sigmoid transforms x (-inf, +inf) to [0,1]
+
+Logistic regression model:
+  P(y=+1 | xi,w) = sigmoid(score(xi))
+                 = 1 / (1 + exp(-w'h(xi)))
+
+one-hot encoding: encoding catergories as numeric features
+
+Multi-class classification: one vs all
+  Each class will have its own coefficients
