@@ -1,0 +1,60 @@
+
+Decision trees
+  non-parametric learning algorithm
+  NP hard problem (many possible trees)
+
+Quality metric
+  Classification error = num_incorrect_pred / num_obs
+
+Greedy algorithm:
+  Start with an empty tree
+  Split on a feature
+  If all data is safe / risky, make a decision
+  Recursively split (step 2) remaining subsets
+
+Challenge: Which feature to split on?
+
+Feature split selection algorithm
+  For each feature
+    split according to the selected feature
+    calculate classification error
+  Pick the feature with lowest classification error
+
+Stop recursing until
+  All data have the same output value (nothing left to split on) OR
+  Run out of features
+
+For continuos inputs
+  Threshold (eg. mid points)
+  Same feature can be used multiple times
+
+PROGRAMMING NOTES
+
+# balance classes
+percentage = len(risky_loans_raw)/(len(safe_loans_raw))
+risky_loans = risky_loans_raw
+safe_loans = safe_loans_raw.sample(percentage, seed=1)
+loans_data = risky_loans.append(safe_loans)
+
+# one-hot encoding
+categorical_variables = []
+for feat_name, feat_type in zip(loans_data.column_names(), loans_data.column_types()):
+    if feat_type == str:
+        categorical_variables.append(feat_name)
+for feature in categorical_variables:
+    loans_data_one_hot_encoded = loans_data[feature].apply(lambda x: {x: 1})
+    loans_data_unpacked = loans_data_one_hot_encoded.unpack(column_name_prefix=feature)
+    # Change None's to 0's
+    for column in loans_data_unpacked.column_names():
+        loans_data_unpacked[column] = loans_data_unpacked[column].fillna(0)
+    loans_data.remove_column(feature)
+    loans_data.add_columns(loans_data_unpacked)
+
+# did not work
+from sklearn import preprocessing
+LabelEncoder fit, transform
+OneHotEncoder fit, transform
+
+from sklearn.tree import DecisionTreeClassifier
+model = DecisionTreeClassifier(max_depth=10)
+fit, predict, predict_proba
