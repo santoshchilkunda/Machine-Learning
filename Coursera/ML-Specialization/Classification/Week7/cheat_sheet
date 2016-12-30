@@ -1,0 +1,35 @@
+
+Gradient ascent - each update requires touching all the datapoints
+
+Stochastic gradient ascent - use one datapoint at a time
+  Pick a different datapoint each time (shuffle)
+  Sensitive to parameters such as step size
+  Reaches max likelihood faster but noisy
+
+Practical considerations while using stochastic gradient:
+  Shuffle before applying stochastic gradient
+  Step size
+    Harder to choose in case of SG
+    Smaller step size will result in a behaviour similar to gradient ascent
+  Do not trust last coefficient (noisy), instead take average of last T values
+  Batch gradient descent: less noisy, more stable, better behaviour near convergence
+  Estimate log likelihood with a sliding window instead of one point
+
+Regularization
+  Multiply regularization term by (1/N)
+  Each point contributes (1/N) to the term
+
+Online learning
+  Fitting models from streaming data
+  Must train models as data arrives
+  Use SG
+  Eg: Ad targeting
+
+Pros
+  Low computation cost
+  Don't need to store all data
+
+Cons
+  Overall system is much more complex
+    Update coeffs every hour or night or week instead of everytime there is a new datapoint
+  
