@@ -17,3 +17,20 @@ one-hot encoding: encoding catergories as numeric features
 
 Multi-class classification: one vs all
   Each class will have its own coefficients
+
+PROGRAMMING NOTES
+
+products['review_clean'] = products['review'].fillna('')
+
+def remove_punctuation(text):
+    import string
+    return text.translate(None, string.punctuation) 
+
+# build a word count vector
+products['word_count'] = graphlab.text_analytics.count_words(review_without_punctuation)
+
+graphlab.logistic_classifier.create
+scores = sentiment_model.predict(sample_test_data, output_type='probability')
+
+# topk
+top20 = sorted_test_data.topk('pred_prob', 20)
