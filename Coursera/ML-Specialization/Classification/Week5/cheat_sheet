@@ -1,0 +1,30 @@
+
+Simple weak classifier: high bias, low variance, low complexity
+Boosting: combine a set of weak classifiers to create a stronger classifier
+Also called Ensemble classifier
+
+AdaBoost (Adaptive Boosting) [Yaav Freund and Robert Schapire]
+  Start with same weight for all the data (alpha)
+  for t=1,2,...T # individual classifiers / decision stumps
+    learn ft(x) with weights alpha
+    compute coefficients wt
+    recompute alpha
+  Final model prediction: sign( sum(wt * ft(x)) )
+
+weighted_error = total weight of mistakes / total weight of all points
+wt = 0.5 * log ( (1 - weighted_error) / weighted_error )
+weighted_error ~= 0 => wt is large => higher weightage to this individual classifier since it performed well
+weighted_error ~= 1 => wt is small => lower weightage to this individual classifier since it performed poorly
+
+alpha update:
+alpha = alpha * exp(-wt) if ft(xi) = yi
+        alpha * exp(wt)  if ft(xi) != yi
+if prediction is correct, reduce alpha since there is nothing more to learn from this datapoint
+if prediction is incorrect, increase alpha to account for the error
+After each iteration, normalize alpha
+
+PROGRAMMING NOTES
+
+from sklearn.ensemble import GradientBoostingClassifier
+model = GradientBoostingClassifier(n_estimators=5, max_depth=6)
+fit, predict, predict_proba, score
