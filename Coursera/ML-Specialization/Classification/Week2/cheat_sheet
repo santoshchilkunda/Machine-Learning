@@ -13,6 +13,7 @@ Quality metric: Maximum likelihood estimation l(w)
 w(t+1) <- w(t) + eta*partial_derivative
 partial_derivative_wrt_wj = sum_over_all_datapoints( hj(xj)*( I - P(y=+1|xi,w) ) )
 I -> indicator function, +1 if y = 1, else 0
+hj(xj) -> feature value
 
 Log likelihood estimation:
 ll(w) = sum_over_all_datapoints( (I-1)*score - log(1 + exp(-score)) )
