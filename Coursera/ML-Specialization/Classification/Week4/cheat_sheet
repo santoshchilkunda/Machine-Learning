@@ -1,0 +1,23 @@
+
+Early stopping conditions
+  Max depth reached
+  Stop when training error does not decrese by more than epsilon
+  Stop if number of data points left is too small
+  (No features left to split)
+
+Instead of #2 above, create the whole tree and then prune (eg. XOR)
+
+Cost = Measure of fit (classfication error) + lambda * Measure of complexity (num of leaves)
+
+Handling missing data
+  Skip missing data
+  Fill missing data with best guess ("Imputation") - majority, average, median, expectation-maximization
+  Adapt ML algorithm to handle missing data
+    unknown can be grouped with one of the outputs
+    each node unknown can take a different route
+    easy for decision trees, harder for other algorithms
+  Feature split selection with missing data - choose branch that leads to lowest classification error
+
+Decision trees - result in complex boundaries when the bundaries are not axis aligned
+
+PROGRAMMING NOTES
