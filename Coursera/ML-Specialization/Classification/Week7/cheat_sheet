@@ -32,4 +32,13 @@ Pros
 Cons
   Overall system is much more complex
     Update coeffs every hour or night or week instead of everytime there is a new datapoint
-  
+
+PROGRAMMING NOTES
+
+# set seed=1 to produce consistent results
+np.random.seed(seed=1)
+# Shuffle the data before starting
+permutation = np.random.permutation(len(feature_matrix))
+feature_matrix = feature_matrix[permutation,:]
+sentiment = sentiment[permutation]
+
