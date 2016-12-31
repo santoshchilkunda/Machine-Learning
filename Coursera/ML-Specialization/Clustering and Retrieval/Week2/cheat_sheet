@@ -13,7 +13,7 @@
     A - diagonal matrix of weights
   * Cosine similarity (inner product)
     Xi'Xq (= cos theta)
-    Normalization: If unnormalized, double the vectors will increase the distance 4X
+    Normalization: If unnormalized, doubling the vectors will increase the distance 4X
     Cosine distance = (1 - normalized cosine similarity) = (1 - (Xi'Xq)/(||Xi||*||Xq||))
     Might return the same distance for short tweet and a long article
 
