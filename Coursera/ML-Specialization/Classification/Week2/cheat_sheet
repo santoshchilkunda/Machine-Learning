@@ -16,6 +16,7 @@ I -> indicator function, +1 if y = 1, else 0
 hj(xj) -> feature value
 
 Log likelihood estimation:
+ll(w) = sum_over_all_datapoints( -ylog(score) - (1-y)log(1-score) )
 ll(w) = sum_over_all_datapoints( (I-1)*score - log(1 + exp(-score)) )
 
 accuracy = 1 - error = num_correc_pred / num_obs
