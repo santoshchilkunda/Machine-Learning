@@ -1,0 +1,29 @@
+
+Polynomial regression: y = w0 + w1*x + w2*x^2 + w3*x^3 + ...
+Treat powers of x as individual features
+
+Modeling seasonality:
+yi = w0 + w1*ti + w2*sin(2*pi*ti/12 - phase) + error
+   = w0 + w1*ti w2*sin(2*pi*ti/2) + w3*cos(2*pi*ti/2) + error
+
+Eg: weather modeling, housing (summer is peak season), flu monitoring, demand forecasting (eg. ski jackets)
+
+yi = sum(wj*hj(xj)) + error
+h0(x) = const
+
+y = H'W + error
+(H' -> H transpose)
+
+RSS(W) = sum((yi - H'W)^2)
+       = (y - H'W)'(y-H'W)
+
+Method 1: closed form solution
+W = ((HH')^-1)Hy (Normal equation)
+HH' is invertible if N > D (full rank matrix)
+Complexity: O(D^3)
+
+Method 2: gradient descent
+wj' <- wj - step_size*partial_dervative_wrt_wj
+partial_dervative_wrt_wj = -2*sum_over_i((y - H'W)hj(xi))
+
+Linear regression - linear in weights, can use non-linear features (x^2, x^3, ...)
