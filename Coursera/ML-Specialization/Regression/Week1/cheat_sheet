@@ -1,0 +1,29 @@
+
+Simple regression: linear regression with one input
+y = w0 + w1*x
+
+(w0, w1) - regression coefficients
+
+Quality metric
+  Residual sum of squares (RSS)
+  RSS(w0,w1) = sum((yi - (w0 + w1*xi))^2), yi -> target
+  Concave function
+
+Convergence criteria: partial derivative < epsilon
+
+Partial derivate wrt w0 = -2*sum(yi - (w0 + w1*xi))
+Partial derivate wrt w1 = -2*sum(yi - (w0 + w1*xi)*xi)
+
+Method 1: Closed form solution (by setting the gradiet equal to 0)
+w0' = sum(yi)/N - avg(w1)*sum(xi)/N
+      avg house   avg     avg sq ft
+      price       estimate
+                  of slope
+
+w1' = (sum(yi*xi) - sum(yi)*sum(xi)/N) / (sum(xi^2) - sum(xi)*sum(yi)/N)
+
+Method 2: Gradient descent
+w' <- w - step_size*partial_derivative
+
+- Generally harder to solve method 1
+- In case of method 2, need to choose step size and convergence
