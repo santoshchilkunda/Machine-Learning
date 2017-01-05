@@ -1,0 +1,58 @@
+Clustering - unsupervised task
+
+A cluster is defined by center and shape / spread
+
+K-means:
+- Initialize k cluster centers
+- Assign observations to clusters based on minimum distance to cluster centers
+- Revise cluster centers as mean of the newly assigned observations
+- Repeat 2 and 3 until convergence
+
+K-means is a co-ordinate descent algorithm: alternating minimization of (1) z given u and (2) u given z
+
+Convergence:
+- local minima (no global minima)
+- no change in cluster assignment
+
+Cluster groupings change with initial cluster centers
+
+Smart initialization with kmeans ++
+- Choose first center uniformly at random from the data points
+- For each observation, compute distance to the nearest cluster center
+- Choose new cluster center from amongst the remaining datapoints with prob of x being chosen proportional to d(x)^2
+- Repeat steps 2 and 3 until k clusters have been chosen
+Costly but kmeans converges rapidly
+
+Cluster heterogeneity = sum of sq distance between datapoints and cluster centers
+- decreases with k (-> overfitting)
+- elbow
+
+MapReduce
+
+Map - parallel over datapoints [kmeans - classify]
+Shuffle - group data points assigned to cluster j together
+Reduce - parallel over keys [kmeans - recenter]
+- commutative and associative
+
+PROGRAMMING NOTES
+
+Euclidean distance over normalized vectors results in a behaviour similar to cosine distance
+
+from sklearn.preprocessing import normalize
+
+# n random points
+if seed is not None:
+  np.random.seed(seed)
+rand_indices = np.random.randint(0,n,k)
+
+from sklearn.metrics import pairwise_distances
+dist = pairwise_distances(queries, tf_idf, metric='euclidean')
+
+np.argmin - returns the index of the minimum point
+
+np.bincount
+
+new_cluster_centers = np.empty(centroids.shape)
+
+# comparing two arrays
+(cluster_assignment_prev==cluster_assignment).all()
