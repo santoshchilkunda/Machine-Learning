@@ -21,6 +21,49 @@
   * 1 - NN
   * k - NN
 
+Complexity of brute force k-NN:
+1-NN: O(N) distance computations per 1-NN query
+k-NN: O(N*log k)
+
+KD trees
+ data structure to represent data
+ recursively partition data into axis aligned boxes
+
+KD tree construction
+ Split into two groups based on xi
+ Split each group based on xj next
+
+Which dimension to split on? widest, alternating
+Value to split at? average, median
+When to stop? fewer than m points, reaches minimum width
+
+Pruning: calculate the distance to the tight boundary
+
+Complexity of KD tree
+ Construction: O(N*log N)
+ 1-NN query: O(log N) [max pruning] to O(N) [no pruning]
+ k-NN query:O(N*log N) to O(N^2)
+
+Locality Sensitive Hashing (LSH) for approximate NN search
+ Provides only approx NN
+ There might still be too many points in the bin to search over
+ Using a random line might work
+ Reduce search cost through more bins
+  Sacrificing accuracy for speed - greater chance that searching in a single bin is not going to give the best result
+  Improve search result by searching adjacent bins
+
+LSH construction
+ Draw h random lines
+ Compute score (-1 -> 0, +1 -> 1) for each point under each line and translate to binary index
+ Use the h-bit bitvector per datapoint as bin index
+ Create hash table (bin indices -> keys)
+ For each query point x, search bin(x) and neighboring bins until time limit
+
+Cost: d (sparse) multiplications per datapoint
+
+Multiple hash tables better than searching more bins in a single hash table
+Multiple hash tables approach - cost of creating tables in higher but offers more accuracy
+
 PROGRAMMING NOTES
 
 # csr (compressed sparse row) matrix
@@ -60,3 +103,23 @@ common_words.issubset(unique_words)
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.metrics.pairwise import cosine_distances
 
+# to return a bitvector
+np.array(doc.dot(random_vectors) >= 0, dtype=int)
+
+# convert bitvector to corresponding integer
+powers_of_two = (1 << np.arange(15, -1, -1))
+index_bits.dot(powers_of_two)
+
+# hash table
+table = {}
+table[bin_index] = [data_index]
+values = table[bin_index]
+values.append(data_index)
+table[bin_index] = values
+
+# get all combinations
+from itertools import combinations
+num_vector=16
+search_radius=3
+for diff in combinations(range(num_vector), search_radius):
+ print diff
