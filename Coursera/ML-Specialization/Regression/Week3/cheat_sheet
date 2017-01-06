@@ -1,0 +1,10 @@
+
+Three measures of error - training error, generalization error, test error
+Three sources of error - noise, bias, variance
+
+Bias - difference between true fit and average fit
+
+MSE = bias^2 + variance
+
+Use validation set to evaluate model complexity
+  
