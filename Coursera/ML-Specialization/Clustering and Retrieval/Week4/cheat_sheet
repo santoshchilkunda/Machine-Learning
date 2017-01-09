@@ -1,0 +1,47 @@
+
+K-means
+  takes into account only cluster center
+  implied homogeneity within the cluster
+  makes hard assignments even when there is uncertainity
+
+Mixture models - soft assignments
+
+Univariate gaussian distribution: N(x|mu,sigma)
+
+Mixture of Gaussians
+  weighted gaussians - each weight is proportional to the size of the cluster
+  each mixture component represents a unique cluster specified by {pi_k, mu_k, sigma_k}
+    pi_k = P(zi=k) probability that ith datapoint is associated with kth cluster before observing the content -> prior prob
+    likelihood term P(xi|zi=ki,mu_k,sigma_k) [= N(xi|mu_k,sigma_k)] given xi is from clusterk, what is the likelihood of seeing xi 
+
+Expectation Maximization (EM)
+
+1) Cluster parameters (mu_k,sigma_k) are already given. Compute responsibility cluster k takes from observation i
+rik = P(zi=k|pi_k,mu_k,sigma_k,xi) = pi_k*N(xi|mu_k,sigma_k) / sum_over_k(pi_k*N(xi|mu_k,sigma_k))
+
+2a) We know cluster assignments. Estimate cluster parameters mu_k, sigma_k, pi_k
+mu_k = sum(xik)/Nk -> average datapoints in cluster k
+sigma_k = sum((xi-mu_k)(xi-mu_k).T)/Nk 
+pi_k = Nk/N -> cluser proportions
+
+2b) What if we knew soft assigments
+mu_k = sum(rik*xi)/Nk_soft
+sigma_k = sum(rik*(xi-mu_k)(xi-mu_k).T)/Nk_soft
+pi_k = Nk/N
+
+Hard assignments - one-hot encoded representations of thresholding soft assignments
+
+EM algorithms
+
+1) E-step: estimate resposibilities
+2) M-step: estimate pi_k, mu_k, sigma_k
+
+- coordinate ascent
+- converges to a local mode
+- another option for initial clusters: run k-means and use the cluster centers computed there
+
+To prevent overfit: don't let variance go to 0 by adding a small diagonal term
+
+K-means - limiting case of EM
+
+Mahalanobis distance - For a Gaussian distribution this distance is proportional to the square root of the negative log likelihood
