@@ -1,0 +1,27 @@
+
+Lasso regression: Regularization for feature selection
+
+How to find the right features?
+
+Option 1: All subsets
+
+Option 2: Greedy algorithm
+(a) Forward stepwise algorithm
+      Start with an empty feature
+      Fit model using current feature set
+      Select next best feature
+(b) Backward stepwise
+(c) Combining forward and backward steps
+
+Option 3: Lasso regularization
+  In case of correlated features, ridge regression places smaller weights across all the correlated features
+  Modified cost = RSS(W) + lambda*L1
+  L1 = sum(|W|)
+  Derivative of |W| does not exist at wj=0
+  Instead of gradient descent use co-ordinate descent
+
+Co-ordinate descent
+Wj_est = delta + lambda/2 if delta < -lambda/2
+         0                
+         delta - lambda/2 if delta > +lambda/2
+delta -> pred value without including the jth feature
