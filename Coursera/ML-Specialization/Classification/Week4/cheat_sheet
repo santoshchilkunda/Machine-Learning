@@ -18,6 +18,6 @@ Handling missing data
     easy for decision trees, harder for other algorithms
   Feature split selection with missing data - choose branch that leads to lowest classification error
 
-Decision trees - result in complex boundaries when the bundaries are not axis aligned
+Decision trees - result in complex boundaries when the boundaries are not axis aligned
 
 PROGRAMMING NOTES
