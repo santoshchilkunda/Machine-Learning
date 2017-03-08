@@ -1,7 +1,7 @@
 
 Early stopping conditions
   Max depth reached
-  Stop when training error does not decrese by more than epsilon
+  Stop when training error does not decrease by more than epsilon
   Stop if number of data points left is too small
   (No features left to split)
 
