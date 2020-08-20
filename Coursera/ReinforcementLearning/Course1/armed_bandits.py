@@ -79,10 +79,10 @@ class kArmedBandits():
 		return explore_map
 
 	# reward: gaussian distribution with mean q(a) and var 1
-	def _calc_reward_(self, mean, var=1.0):
+	def _simulate_reward_(self, mean, var=1.0):
 		return np.random.normal(mean, var)
 
-	# update action value according to:
+	# update action value according to (sample average method):
 	# Qn+1 = Qn + (1/n)*(Rn - Qn)
 	# NewEstimate = OldEstimate + StepSize [ Target - OldEstimate ]
 	def _update_action_value_(self, p, k, n, target):
@@ -99,6 +99,8 @@ class kArmedBandits():
 
 		# (TBD) vectorize
 		for t in range(self.steps):
+
+			# epsilon-greedy action selection
 			exploit = self.epsilon_map[:,t]
 			k_exploit = np.argmax(self.action_value_map, axis=1)
 			k_explore = self._create_explore_map_()
@@ -111,7 +113,7 @@ class kArmedBandits():
 			for p in range(self.problems):
 				act_val = act_val_map[p]
 
-				new_reward = self._calc_reward_(act_val)
+				new_reward = self._simulate_reward_(act_val)
 				self.rewards[p,t] = new_reward
 
 				n = self.rewards_n[p,k[p]]
