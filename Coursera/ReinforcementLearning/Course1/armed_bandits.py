@@ -10,20 +10,24 @@ from collections import OrderedDict
 
 class kArmedBandits():
 
-	def __init__(self, k, problems, steps, epsilon):
+	def __init__(self, k, problems, steps, epsilon, optimistic_init_val):
 		self.k = k
 		self.problems = problems
 		self.epsilon = epsilon
 		self.steps = steps
 
 		# problems x k
-		self.action_value_map = self._create_action_value_map_(problems, k)
+		self.action_value_map = self._create_action_value_map_(problems, k, optimistic_init_val)
 
 		# problems x steps
 		self.epsilon_map = self._create_epsilon_map_(epsilon, problems, steps)
 
 		# problems x steps
 		self.rewards = np.zeros((problems, steps), dtype=np.float32)
+
+		# problems x k
+		# number of times this action was picked (used in step size calculation)
+		self.rewards_n = np.zeros((problems, k), dtype=np.float32)
 
 		# steps x 1
 		self.rewards_norm = np.zeros(steps, dtype=np.float32)
@@ -38,8 +42,8 @@ class kArmedBandits():
 
 	# problems x k
 	# gaussian distribution with zero mean and unit variance
-	def _create_action_value_map_(self, problems, k):
-		action_value_map = np.zeros((problems,k), dtype=np.float32)
+	def _create_action_value_map_(self, problems, k, opt_init_val):
+		action_value_map = np.zeros((problems,k), dtype=np.float32) + opt_init_val
 
 		'''
 		# (TBD) vectorize?
@@ -107,23 +111,29 @@ class kArmedBandits():
 			for p in range(self.problems):
 				act_val = act_val_map[p]
 
-				reward = self._calc_reward_(act_val)
-				self.rewards[p, t] = reward
+				new_reward = self._calc_reward_(act_val)
+				self.rewards[p,t] = new_reward
 
-				self._update_action_value_(p, k[p], t, reward)
+				n = self.rewards_n[p,k[p]]
+				self.rewards_n[p,k[p]] += 1
+
+				self._update_action_value_(p, k[p], n, new_reward)
 
 	def _normalize_reward_(self):
 		# normalize accross problems axis
 		self.rewards_norm = np.mean(self.rewards, axis=0)
 
 # norm_rewards_arr: num_epsilons x steps
-def plot_results(norm_rewards_dict):
+def plot_results(norm_rewards_dict, e, o, stride):
 	x_len = list(norm_rewards_dict.values())[0].shape[0]
 	x_axis = np.linspace(0, x_len, x_len)
 
 	fig = plt.figure()
-	for eps,rewards in norm_rewards_dict.items():
-		plt.plot(x_axis, rewards, label=str(eps))
+	for i,rewards in norm_rewards_dict.items():
+		x = int(i / stride)
+		y = i % stride
+		label = 'eps_' + str(e[x,y]) + '-init_' + str(o[x,y])
+		plt.plot(x_axis, rewards, label=label)
 
 	plt.title('K-Armed Bandits', fontsize=14)
 	plt.xlabel('Steps', fontsize=14)
@@ -155,6 +165,10 @@ def parse_args(args):
                         metavar='Comma separated list of epsilons',
                         help='Eg: 0,0.01,0.1')
 
+	parser.add_argument('-i', '--optinit', type=str, required=True,
+                        metavar='Comma separated list of epsilons',
+                        help='Eg: 0,1.5')
+
 	args = parser.parse_args(args)
 
 	return args
@@ -167,16 +181,25 @@ if __name__ == '__main__':
 	epsilon_list = args.epsilons.split(',')
 	epsilon_list = [float(e) for e in epsilon_list]
 
+	opt_init_values_list = args.optinit.split(',')
+	opt_init_values_list = [float(i) for i in opt_init_values_list]
+
+	e,o = np.meshgrid(np.asarray(epsilon_list), np.asarray(opt_init_values_list))
+	total_iter = e.shape[0]*e.shape[1]
+	stride = e.shape[1]
+
 	k = args.K
 	problems = args.problems
 	steps = args.steps
 
 	norm_reward_dict = OrderedDict()
-	for eps in epsilon_list:
-		print('Running k-armed bandits for epsilon %s' % eps)
-		k_armed_bandits = kArmedBandits(k, problems, steps, eps)
-		norm_reward_dict[eps] = k_armed_bandits.run()
+	for i in range(total_iter):
+		x = int(i / stride)
+		y = i % stride
+		print('Running k-armed bandits for epsilon %s and optimistic init %s' % (e[x,y], o[x,y]))
+		k_armed_bandits = kArmedBandits(k, problems, steps, e[x,y], o[x,y])
+		norm_reward_dict[i] = k_armed_bandits.run()
 
-	plot_results(norm_reward_dict)
+	plot_results(norm_reward_dict, e, o, stride)
 
 	print('Complete')
